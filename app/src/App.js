@@ -41,11 +41,11 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div className="App">
         <SearchForm handleSubmit={this.handleSubmit} />
         <UserCard data={this.state.user} />
+        <h1 className="h1text">Your Amazing Followers</h1>
         <FollowersList data={this.state.followers} />
       </div>
     );

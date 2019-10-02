@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import EmailIcon from "@material-ui/icons/Email";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import axios from "axios";
 
 const styles = theme => ({
   card: {
@@ -55,10 +56,40 @@ const styles = theme => ({
 });
 
 class UserCard extends Component {
-  state = { expanded: false };
+  state = { expanded: false, repos: [] };
+
+  componentDidMount() {
+    if (this.props.data) {
+      axios
+        .get(this.props.data.repos_url)
+        .then(res => {
+          let repoArray = [...res.data];
+          let sortedRepoArray = repoArray.sort((a, b) => {
+            return Date.parse(b.updated_at) - Date.parse(a.updated_at);
+          });
+          this.setState({ ...this.state, repos: sortedRepoArray.slice(0, 5) });
+        })
+        .catch(err => console.error(err));
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      axios
+        .get(this.props.data.repos_url)
+        .then(res => {
+          let repoArray = [...res.data];
+          let sortedRepoArray = repoArray.sort((a, b) => {
+            return Date.parse(b.updated_at) - Date.parse(a.updated_at);
+          });
+          this.setState({ ...this.state, repos: sortedRepoArray.slice(0, 5) });
+        })
+        .catch(err => console.error(err));
+    }
+  }
 
   handleExpandClick = () => {
-    this.setState({ expanded: !this.state.expanded });
+    this.setState({ ...this.state, expanded: !this.state.expanded });
   };
 
   renderUserCard = () => {
@@ -124,11 +155,26 @@ class UserCard extends Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Recently worked repos here</Typography>
+            <Typography paragraph>Most recently worked repos</Typography>
+            {this.state.repos.length > 0 ? this.renderRepos() : null}
           </CardContent>
         </Collapse>
       </Card>
     );
+  };
+
+  renderRepos = () => {
+    return this.state.repos.map(repo => {
+      return (
+        <>
+          <Typography paragraph>
+            <a href={repo.html_url}>{repo.name}</a>
+            {repo.description ? ` - ${repo.description}` : null}
+          </Typography>
+          <Typography paragraph></Typography>
+        </>
+      );
+    });
   };
 
   renderSkeleton = () => {
@@ -137,6 +183,7 @@ class UserCard extends Component {
   };
 
   render() {
+    console.log(this.state.repos);
     return <>{this.props.data ? this.renderUserCard() : null}</>;
   }
 }

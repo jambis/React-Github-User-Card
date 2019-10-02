@@ -4,7 +4,7 @@ import FollowersCard from "./FollowersCard";
 class FollowersList extends Component {
   renderFollowers = () => {
     return this.props.data.map((follower, index) => (
-      <FollowersCard key={index} data={follower.url} />
+      <FollowersCard key={index} index={index} data={follower.url} />
     ));
   };
 

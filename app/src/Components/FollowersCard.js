@@ -22,20 +22,11 @@ class FollowersCard extends Component {
   }
 
   renderFollowerCard = () => {
-    return <UserCard data={this.state.data} />;
-  };
-
-  renderSkeleton = () => {
-    //skeleton stuff here
-    return null;
+    return <UserCard key={this.props.index} data={this.state.data} />;
   };
 
   render() {
-    return (
-      <div>
-        {this.state.data ? this.renderFollowerCard() : this.renderSkeleton()}
-      </div>
-    );
+    return <div>{this.state.data ? this.renderFollowerCard() : null}</div>;
   }
 }
 
