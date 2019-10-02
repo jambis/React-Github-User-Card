@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import EmailIcon from "@material-ui/icons/Email";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Skeleton from "@material-ui/lab/Skeleton";
 import axios from "axios";
 
 const styles = theme => ({
@@ -179,12 +180,57 @@ class UserCard extends Component {
 
   renderSkeleton = () => {
     //Skeleton stuff here
-    return null;
+    return (
+      <Card className={this.props.classes.card}>
+        <div style={{ display: "flex" }}>
+          <Skeleton variant="circle" width={100} height={100} />
+          <div style={{ marginLeft: "10px" }}>
+            <Skeleton variant="text" width={200} height={36} />
+            <Skeleton variant="text" width={100} height={24} />
+          </div>
+        </div>
+        <Skeleton
+          variant="text"
+          height={18}
+          width={"90%"}
+          style={{ margin: "40px 20px" }}
+        />
+        <div style={{ display: "flex", margin: "15px 0" }}>
+          <Skeleton
+            variant="circle"
+            width={18}
+            height={18}
+            style={{ marginTop: "15px", marginRight: "15px" }}
+          />
+          <Skeleton variant="text" width={100} height={18} />
+        </div>
+        <div style={{ display: "flex", margin: "15px 0" }}>
+          <Skeleton
+            variant="circle"
+            width={18}
+            height={18}
+            style={{ marginTop: "15px", marginRight: "15px" }}
+          />
+          <Skeleton variant="text" width={100} height={18} />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            margin: "10px"
+          }}
+        >
+          <Skeleton variant="circle" width={36} height={36} />
+        </div>
+      </Card>
+    );
   };
 
   render() {
     console.log(this.state.repos);
-    return <>{this.props.data ? this.renderUserCard() : null}</>;
+    return (
+      <>{this.props.data ? this.renderUserCard() : this.renderSkeleton()}</>
+    );
   }
 }
 
